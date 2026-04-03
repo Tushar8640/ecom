@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(**)",
+      "Edit(**)",
+      "Tools(*)",
+      "Bash(cp -r D:/self/ecommerce-temp/ecommerce-app/* D:/self/ecommerce/)",
+      "Bash(cp -r D:/self/ecommerce-temp/ecommerce-app/.* D:/self/ecommerce/)",
+      "Bash(rm -rf D:/self/ecommerce-temp)",
+      "Bash(mv D:/self/ecommerce/projects.md.bak D:/self/ecommerce/projects.md)",
+      "Bash(npm install:*)",
+      "Bash(**)",
+      "Bash(npx shadcn@latest init -d)"
+    ]
+  }
+}
