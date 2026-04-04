@@ -10,7 +10,11 @@
       "Bash(mv D:/self/ecommerce/projects.md.bak D:/self/ecommerce/projects.md)",
       "Bash(npm install:*)",
       "Bash(**)",
-      "Bash(npx shadcn@latest init -d)"
+      "Bash(npx shadcn@latest init -d)",
+      "Bash(npx shadcn@latest add input label card dialog select textarea table badge dropdown-menu sheet tabs avatar separator toast checkbox radio-group pagination skeleton tooltip -y)",
+      "Bash(npx shadcn@latest add input label card dialog select textarea table badge dropdown-menu sheet tabs avatar separator sonner checkbox radio-group pagination skeleton tooltip -y)",
+      "Skill(update-config)",
+      "Bash(npx prisma:*)"
     ]
   }
 }

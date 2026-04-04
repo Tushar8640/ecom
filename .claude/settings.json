@@ -3,7 +3,13 @@
     "allow": [
       "Read(**)",
       "Edit(**)",
-      "Tools(*)"
-    ]
+      "Tools(*)",
+      "Bash(*)",
+      "Write(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Agent(*)"
+    ],
+    "defaultMode": "bypassPermissions"
   }
 }

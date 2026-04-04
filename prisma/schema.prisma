@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  COMPLETED
+  RETURNED
+}
+
+enum MessageStatus {
+  OPEN
+  RESOLVED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart     Cart?
+  orders   Order[]
+  messages Message[]
+  wishlist Wishlist?
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  products  Product[]
+}
+
+model Product {
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  price           Float
+  costPrice       Float    @default(0)
+  brand           String   @default("")
+  model           String   @default("")
+  sku             String   @unique @default(cuid())
+  warranty        String   @default("")
+  images          String[] @default([])
+  categoryId      String
+  category        Category @relation(fields: [categoryId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Tech attributes
+  processor       String?
+  ram             String?
+  storage         String?
+  display         String?
+  battery         String?
+  operatingSystem String?
+  graphics        String?
+  camera          String?
+  connectivity    String?
+  ports           String?
+  weight          String?
+  dimensions      String?
+
+  // Clothing attributes
+  material        String?
+  gender          String?
+  fit             String?
+
+  variants      Variant[]
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+  wishlistItems WishlistItem[]
+}
+
+model Variant {
+  id        String @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  size      String  @default("")
+  color     String  @default("")
+  stock     Int     @default(0)
+}
+
+model Cart {
+  id     String     @id @default(cuid())
+  userId String     @unique
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items  CartItem[]
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  cartId    String
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int     @default(1)
+  size      String  @default("")
+  color     String  @default("")
+
+  @@unique([cartId, productId, size, color])
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  status      OrderStatus @default(PENDING)
+  total       Float
+
+  // Shipping info
+  fullName    String      @default("")
+  email       String      @default("")
+  phone       String      @default("")
+  address     String      @default("")
+  city        String      @default("")
+  state       String      @default("")
+  zipCode     String      @default("")
+  country     String      @default("")
+  notes       String      @default("")
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  items       OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Float
+  size      String  @default("")
+  color     String  @default("")
+}
+
+model Message {
+  id         String        @id @default(cuid())
+  userId     String
+  user       User          @relation(fields: [userId], references: [id])
+  subject    String
+  message    String
+  status     MessageStatus @default(OPEN)
+  adminReply String?
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+}
+
+model Wishlist {
+  id     String         @id @default(cuid())
+  userId String         @unique
+  user   User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items  WishlistItem[]
+}
+
+model WishlistItem {
+  id         String   @id @default(cuid())
+  wishlistId String
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([wishlistId, productId])
+}
