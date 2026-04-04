@@ -18,6 +18,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Eye, MapPin, User, Phone, Mail, Package, StickyNote, ShoppingBag } from "lucide-react";
 import { toast } from "sonner";
+import { formatPrice } from "@/lib/utils";
 
 interface OrderItem {
   id: string;
@@ -157,7 +158,7 @@ export default function AdminOrdersPage() {
                   </TableCell>
                   <TableCell className="text-sm">{new Date(order.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell>{order.items.length}</TableCell>
-                  <TableCell className="font-medium">${order.total.toFixed(2)}</TableCell>
+                  <TableCell className="font-medium">{formatPrice(order.total)}</TableCell>
                   <TableCell>
                     <Badge variant="secondary" className={statusColor[order.status] || ""}>{order.status}</Badge>
                   </TableCell>
@@ -281,13 +282,13 @@ export default function AdminOrdersPage() {
                       <div className="min-w-0 flex-1">
                         <p className="truncate text-sm font-medium">{item.product.name}</p>
                         <p className="text-xs text-muted-foreground">
-                          Qty: {item.quantity} × ${item.price.toFixed(2)}
+                          Qty: {item.quantity} × {formatPrice(item.price)}
                           {(item.size || item.color) &&
                             ` · ${[item.size, item.color].filter(Boolean).join(" / ")}`}
                         </p>
                       </div>
                       <span className="text-sm font-medium">
-                        ${(item.quantity * item.price).toFixed(2)}
+                        {formatPrice(item.quantity * item.price)}
                       </span>
                     </div>
                   ))}
@@ -300,7 +301,7 @@ export default function AdminOrdersPage() {
                   </div>
                   <div className="flex justify-between font-semibold">
                     <span>Total</span>
-                    <span>${selected.total.toFixed(2)}</span>
+                    <span>{formatPrice(selected.total)}</span>
                   </div>
                 </CardContent>
               </Card>

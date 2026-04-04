@@ -11,6 +11,7 @@ import {
   ShoppingCart, Clock, CheckCircle, RotateCcw,
   DollarSign, TrendingUp, BarChart3,
 } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
 
 interface Analytics {
   totalOrders: number;
@@ -52,7 +53,7 @@ export default function AdminAnalyticsPage() {
 
   if (!data) return <p className="py-12 text-center text-muted-foreground">Failed to load analytics.</p>;
 
-  const fmt = (n: number) => `$${n.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+  const fmt = formatPrice;
 
   const stats = [
     { title: "Total Orders", value: data.totalOrders, icon: ShoppingCart, color: "text-blue-600", bg: "bg-blue-50" },
@@ -155,7 +156,7 @@ export default function AdminAnalyticsPage() {
                     <TableRow key={p.id || i}>
                       <TableCell className="font-medium text-sm">{p.name || "Unknown"}</TableCell>
                       <TableCell>{p.totalQuantity}</TableCell>
-                      <TableCell>${(p.price || 0).toFixed(2)}</TableCell>
+                      <TableCell>{formatPrice(p.price || 0)}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

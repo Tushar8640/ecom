@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator";
 const faqs = [
   {
     q: "How long does shipping take?",
-    a: "Standard shipping takes 5-7 business days. Express shipping is available for 2-3 business day delivery. Free shipping on orders over $50.",
+    a: "Standard shipping takes 5-7 business days. Express shipping is available for 2-3 business day delivery. Free shipping on orders over ৳5,000.",
   },
   {
     q: "What is your return policy?",

@@ -4,11 +4,13 @@ import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import type { RootState } from "@/store/store";
 import CartItem from "@/components/cart/CartItem";
+import FreeShippingIndicator from "@/components/cart/FreeShippingIndicator";
 import EmptyState from "@/components/shared/EmptyState";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ShoppingCart } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
 
 export default function CartPage() {
   const router = useRouter();
@@ -51,11 +53,12 @@ export default function CartPage() {
             <CardTitle>Order Summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
+            <FreeShippingIndicator subtotal={total} />
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">
                 Items ({items.reduce((s, i) => s + i.quantity, 0)})
               </span>
-              <span>${total.toFixed(2)}</span>
+              <span>{formatPrice(total)}</span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">Shipping</span>
@@ -64,7 +67,7 @@ export default function CartPage() {
             <Separator />
             <div className="flex justify-between font-semibold">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{formatPrice(total)}</span>
             </div>
           </CardContent>
           <CardFooter>

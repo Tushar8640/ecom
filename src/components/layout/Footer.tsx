@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import NewsletterForm from "@/components/shared/NewsletterForm";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -92,6 +93,15 @@ export default function Footer() {
               ))}
             </ul>
           </div>
+        </div>
+
+        <Separator className="my-8" />
+
+        {/* Newsletter */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <h3 className="text-sm font-semibold">Subscribe to our newsletter</h3>
+          <p className="text-xs text-muted-foreground">Get updates on new products and sales</p>
+          <NewsletterForm />
         </div>
 
         <Separator className="my-8" />

@@ -18,9 +18,13 @@ const publicPaths = [
   "/login",
   "/register",
   "/products",
+  "/forgot-password",
+  "/reset-password",
+  "/blog",
+  "/categories",
 ];
 
-const authRequiredPaths = ["/cart", "/orders", "/messages"];
+const authRequiredPaths = ["/cart", "/orders", "/messages", "/profile"];
 
 const adminPaths = ["/admin"];
 
@@ -31,6 +35,8 @@ function isPublicPath(pathname: string): boolean {
   if (pathname.startsWith("/api/products") && !pathname.includes("POST")) return true;
   if (pathname.startsWith("/_next/")) return true;
   if (pathname.startsWith("/favicon")) return true;
+  if (pathname.startsWith("/blog")) return true;
+  if (pathname.startsWith("/categories")) return true;
   return false;
 }
 

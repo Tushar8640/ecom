@@ -6,6 +6,7 @@ import Image from "next/image";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ProductCard from "@/components/products/ProductCard";
+import FlashSaleSection from "@/components/shared/FlashSaleSection";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -182,7 +183,7 @@ export default function Home() {
               {
                 icon: Truck,
                 title: "Free Shipping",
-                desc: "On orders over $50",
+                desc: "On orders over ৳5,000",
                 color: "bg-blue-50 text-blue-600",
               },
               {
@@ -217,6 +218,13 @@ export default function Home() {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Flash Sales */}
+        <section className="py-8">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <FlashSaleSection />
           </div>
         </section>
 

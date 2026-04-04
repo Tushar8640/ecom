@@ -12,10 +12,20 @@ enum Role {
   ADMIN
 }
 
+enum AdminRole {
+  SUPER_ADMIN
+  MANAGER
+  SUPPORT
+}
+
 enum OrderStatus {
   PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
   COMPLETED
   RETURNED
+  CANCELLED
 }
 
 enum MessageStatus {
@@ -23,26 +33,59 @@ enum MessageStatus {
   RESOLVED
 }
 
-model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum ShippingMethod {
+  STANDARD
+  EXPRESS
+  SAME_DAY
+}
 
-  cart     Cart?
-  orders   Order[]
-  messages Message[]
-  wishlist Wishlist?
+enum NotificationType {
+  ORDER_STATUS
+  PRICE_DROP
+  LOW_STOCK
+  SYSTEM
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  password      String
+  role          Role      @default(USER)
+  phone         String?
+  avatar        String?
+  adminRole     AdminRole?
+  isBanned      Boolean   @default(false)
+  resetToken    String?
+  resetTokenExp DateTime?
+  loyaltyPoints Int       @default(0)
+  deletedAt     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  cart            Cart?
+  orders          Order[]
+  messages        Message[]
+  wishlist        Wishlist?
+  addresses       Address[]
+  questions       ProductQuestion[]
+  answers         ProductAnswer[]
+  notifications   Notification[]
+  newsletterSub   NewsletterSubscription?
+  adminLogs       AdminLog[]
 }
 
 model Category {
-  id        String    @id @default(cuid())
-  name      String    @unique
-  createdAt DateTime  @default(now())
-  products  Product[]
+  id          String     @id @default(cuid())
+  name        String     @unique
+  slug        String     @unique @default("")
+  description String     @default("")
+  image       String     @default("")
+  parentId    String?
+  parent      Category?  @relation("CategoryTree", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryTree")
+  createdAt   DateTime   @default(now())
+  products    Product[]
 }
 
 model Product {
@@ -56,6 +99,13 @@ model Product {
   sku             String   @unique @default(cuid())
   warranty        String   @default("")
   images          String[] @default([])
+  tags            String[] @default([])
+  rating          Float    @default(0)
+  reviewCount     Int      @default(0)
+  salePrice       Float?
+  saleEndsAt      DateTime?
+  isFeatured      Boolean  @default(false)
+  weightGrams     Int?
   categoryId      String
   category        Category @relation(fields: [categoryId], references: [id])
   createdAt       DateTime @default(now())
@@ -84,15 +134,24 @@ model Product {
   cartItems     CartItem[]
   orderItems    OrderItem[]
   wishlistItems WishlistItem[]
+  questions     ProductQuestion[]
+  sizeGuide     SizeGuide?
+
+  @@index([categoryId])
+  @@index([price])
+  @@index([createdAt])
+  @@index([name])
 }
 
 model Variant {
-  id        String @id @default(cuid())
+  id        String  @id @default(cuid())
   productId String
   product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   size      String  @default("")
   color     String  @default("")
   stock     Int     @default(0)
+
+  @@index([productId])
 }
 
 model Cart {
@@ -113,14 +172,19 @@ model CartItem {
   color     String  @default("")
 
   @@unique([cartId, productId, size, color])
+  @@index([cartId])
 }
 
 model Order {
-  id          String      @id @default(cuid())
-  userId      String
-  user        User        @relation(fields: [userId], references: [id])
-  status      OrderStatus @default(PENDING)
-  total       Float
+  id                String      @id @default(cuid())
+  userId            String
+  user              User        @relation(fields: [userId], references: [id])
+  status            OrderStatus @default(PENDING)
+  total             Float
+  shippingMethod    ShippingMethod @default(STANDARD)
+  shippingCost      Float       @default(0)
+  trackingNumber    String?
+  estimatedDelivery DateTime?
 
   // Shipping info
   fullName    String      @default("")
@@ -136,6 +200,11 @@ model Order {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   items       OrderItem[]
+  statusHistory OrderStatusHistory[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 model OrderItem {
@@ -148,6 +217,9 @@ model OrderItem {
   price     Float
   size      String  @default("")
   color     String  @default("")
+
+  @@index([orderId])
+  @@index([productId])
 }
 
 model Message {
@@ -177,4 +249,133 @@ model WishlistItem {
   product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@unique([wishlistId, productId])
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label     String   @default("Home")
+  fullName  String
+  phone     String
+  address   String
+  city      String
+  state     String
+  zipCode   String
+  country   String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductQuestion {
+  id        String          @id @default(cuid())
+  productId String
+  product   Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User            @relation(fields: [userId], references: [id])
+  question  String
+  answers   ProductAnswer[]
+  createdAt DateTime        @default(now())
+}
+
+model ProductAnswer {
+  id         String          @id @default(cuid())
+  questionId String
+  question   ProductQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User            @relation(fields: [userId], references: [id])
+  answer     String
+  isAdmin    Boolean         @default(false)
+  createdAt  DateTime        @default(now())
+}
+
+model SizeGuide {
+  id        String  @id @default(cuid())
+  productId String  @unique
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  content   String
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  message   String
+  link      String?
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@index([userId, read])
+}
+
+model OrderStatusHistory {
+  id        String      @id @default(cuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    OrderStatus
+  note      String?
+  createdAt DateTime    @default(now())
+}
+
+model AdminLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([userId])
+}
+
+model Banner {
+  id        String    @id @default(cuid())
+  title     String
+  subtitle  String    @default("")
+  image     String
+  link      String    @default("")
+  isActive  Boolean   @default(true)
+  sortOrder Int       @default(0)
+  startsAt  DateTime?
+  endsAt    DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model NewsletterSubscription {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+model BlogPost {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  excerpt     String    @default("")
+  content     String
+  coverImage  String    @default("")
+  published   Boolean   @default(false)
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model FlashSale {
+  id         String   @id @default(cuid())
+  name       String
+  discount   Float
+  startsAt   DateTime
+  endsAt     DateTime
+  isActive   Boolean  @default(true)
+  productIds String[]
+  createdAt  DateTime @default(now())
 }

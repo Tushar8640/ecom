@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/select";
 import { ArrowLeft, Loader2, ShoppingBag, MapPin, User, CreditCard } from "lucide-react";
 import { toast } from "sonner";
+import { formatPrice } from "@/lib/utils";
 
 const countries = [
   "United States",
@@ -49,6 +50,23 @@ export default function CheckoutPage() {
     (state: RootState) => state.auth
   );
   const [placing, setPlacing] = useState(false);
+  const [addresses, setAddresses] = useState<any[]>([]);
+  const [selectedAddress, setSelectedAddress] = useState<string>("");
+
+  useEffect(() => {
+    async function fetchAddresses() {
+      try {
+        const res = await fetch("/api/user/addresses");
+        if (res.ok) {
+          const data = await res.json();
+          setAddresses(data.addresses || []);
+        }
+      } catch {
+        // silently fail — saved addresses are optional
+      }
+    }
+    fetchAddresses();
+  }, []);
 
   const [form, setForm] = useState({
     fullName: user?.name || "",
@@ -64,6 +82,23 @@ export default function CheckoutPage() {
 
   const update = (key: string, value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
+
+  const handleAddressSelect = (addressId: string) => {
+    setSelectedAddress(addressId);
+    const addr = addresses.find((a) => a.id === addressId);
+    if (addr) {
+      setForm((f) => ({
+        ...f,
+        fullName: addr.fullName || f.fullName,
+        phone: addr.phone || f.phone,
+        address: addr.address || "",
+        city: addr.city || "",
+        state: addr.state || "",
+        zipCode: addr.zipCode || "",
+        country: addr.country || "",
+      }));
+    }
+  };
 
   if (!isAuthenticated) {
     router.push("/login?callbackUrl=/cart");
@@ -193,6 +228,34 @@ export default function CheckoutPage() {
               </CardContent>
             </Card>
 
+            {/* Saved Addresses */}
+            {addresses.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <MapPin className="h-4 w-4" /> Saved Addresses
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <Select
+                    value={selectedAddress}
+                    onValueChange={handleAddressSelect}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a saved address" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {addresses.map((addr) => (
+                        <SelectItem key={addr.id} value={addr.id}>
+                          {addr.label || "Address"} &mdash; {addr.city}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </CardContent>
+              </Card>
+            )}
+
             {/* Shipping Address */}
             <Card>
               <CardHeader>
@@ -315,7 +378,7 @@ export default function CheckoutPage() {
                         </p>
                       </div>
                       <span className="text-sm font-medium">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        {formatPrice(item.price * item.quantity)}
                       </span>
                     </div>
                   ))}
@@ -328,7 +391,7 @@ export default function CheckoutPage() {
                     <span className="text-muted-foreground">
                       Items ({itemCount})
                     </span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>{formatPrice(total)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Shipping</span>
@@ -337,7 +400,7 @@ export default function CheckoutPage() {
                   <Separator />
                   <div className="flex justify-between text-base font-semibold">
                     <span>Total</span>
-                    <span>${total.toFixed(2)}</span>
+                    <span>{formatPrice(total)}</span>
                   </div>
                 </div>
               </CardContent>
@@ -351,7 +414,7 @@ export default function CheckoutPage() {
                   {placing && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
-                  Place Order &mdash; ${total.toFixed(2)}
+                  Place Order &mdash; {formatPrice(total)}
                 </Button>
               </CardFooter>
             </Card>

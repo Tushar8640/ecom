@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
+import { cn, formatPrice } from "@/lib/utils";
 
 interface Product {
   id: string;
@@ -132,7 +132,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </h3>
         <div className="mt-2 flex items-center justify-between gap-2">
           <span className="text-lg font-bold">
-            ${product.price.toFixed(2)}
+            {formatPrice(product.price)}
           </span>
           <Button
             size="sm"

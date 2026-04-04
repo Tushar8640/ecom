@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { Plus, Search, Pencil, Trash2, Package, Loader2, X } from "lucide-react";
 import { toast } from "sonner";
+import { formatPrice } from "@/lib/utils";
 
 interface Product {
   id: string;
@@ -229,7 +230,7 @@ export default function AdminProductsPage() {
                       <span className="text-muted-foreground">&mdash;</span>
                     )}
                   </TableCell>
-                  <TableCell className="font-medium">${p.price.toFixed(2)}</TableCell>
+                  <TableCell className="font-medium">{formatPrice(p.price)}</TableCell>
                   <TableCell>{stockBadge(totalStock(p.variants))}</TableCell>
                   <TableCell className="font-mono text-xs">{p.sku.slice(0, 8)}</TableCell>
                   <TableCell>

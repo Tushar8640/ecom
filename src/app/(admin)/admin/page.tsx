@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { formatPrice } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -94,14 +95,14 @@ export default function AdminDashboard() {
     },
     {
       title: "Revenue",
-      value: `$${(analytics?.totalRevenue ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`,
+      value: formatPrice(analytics?.totalRevenue ?? 0),
       icon: DollarSign,
       color: "text-emerald-600",
       bg: "bg-emerald-50",
     },
     {
       title: "Profit",
-      value: `$${(analytics?.profit ?? 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`,
+      value: formatPrice(analytics?.profit ?? 0),
       icon: TrendingUp,
       color: "text-violet-600",
       bg: "bg-violet-50",
@@ -237,7 +238,7 @@ export default function AdminDashboard() {
                       {order.items.length}
                     </TableCell>
                     <TableCell className="font-medium">
-                      ${order.total.toFixed(2)}
+                      {formatPrice(order.total)}
                     </TableCell>
                     <TableCell>
                       <Badge

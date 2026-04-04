@@ -7,6 +7,7 @@ import type { CartItem as CartItemType } from "@/store/cartSlice";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
+import { formatPrice } from "@/lib/utils";
 
 interface CartItemProps {
   item: CartItemType;
@@ -90,7 +91,7 @@ export default function CartItem({ item }: CartItemProps) {
           {/* Price & Remove */}
           <div className="flex items-center gap-3">
             <span className="text-sm font-bold tabular-nums">
-              ${(item.price * item.quantity).toFixed(2)}
+              {formatPrice(item.price * item.quantity)}
             </span>
             <Button
               variant="ghost"

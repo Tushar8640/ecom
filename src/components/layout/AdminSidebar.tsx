@@ -26,6 +26,13 @@ import {
   LogOut,
   Menu,
   ShoppingBag,
+  Users,
+  Warehouse,
+  FileText,
+  Image as ImageIcon,
+  Zap,
+  BookOpen,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -34,8 +41,15 @@ const navItems = [
   { href: "/admin/products", label: "Products", icon: Package },
   { href: "/admin/categories", label: "Categories", icon: FolderTree },
   { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { href: "/admin/inventory", label: "Inventory", icon: Warehouse },
+  { href: "/admin/users", label: "Customers", icon: Users },
   { href: "/admin/messages", label: "Messages", icon: MessageSquare },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/admin/reports", label: "Reports", icon: FileText },
+  { href: "/admin/banners", label: "Banners", icon: ImageIcon },
+  { href: "/admin/flash-sales", label: "Flash Sales", icon: Zap },
+  { href: "/admin/blog", label: "Blog", icon: BookOpen },
+  { href: "/admin/logs", label: "Activity Log", icon: ClipboardList },
 ];
 
 function SidebarContent({

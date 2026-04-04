@@ -1,0 +1,12 @@
+{
+  "name": "ShopNest",
+  "short_name": "ShopNest",
+  "description": "Discover quality products at great prices",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#18181b",
+  "icons": [
+    { "src": "/favicon.ico", "sizes": "64x64", "type": "image/x-icon" }
+  ]
+}

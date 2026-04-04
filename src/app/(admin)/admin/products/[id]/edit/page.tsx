@@ -10,9 +10,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { ArrowLeft, Plus, Trash2, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { formatPrice } from "@/lib/utils";
 
 interface Category { id: string; name: string; }
 interface Variant { size: string; color: string; stock: number; }
@@ -27,11 +29,12 @@ export default function EditProductPage() {
   const [form, setForm] = useState({
     name: "", description: "", price: "", costPrice: "",
     brand: "", model: "", sku: "", warranty: "",
-    categoryId: "", images: "",
+    categoryId: "", images: "", tags: "", salePrice: "",
     processor: "", ram: "", storage: "", display: "",
     battery: "", os: "", graphics: "", camera: "", connectivity: "",
     material: "", gender: "", fit: "",
   });
+  const [isFeatured, setIsFeatured] = useState(false);
   const [variants, setVariants] = useState<Variant[]>([]);
 
   useEffect(() => {
@@ -53,11 +56,14 @@ export default function EditProductPage() {
           brand: p.brand || "", model: p.model || "", sku: p.sku || "",
           warranty: p.warranty || "", categoryId: p.categoryId || "",
           images: (p.images || []).join(", "),
+          tags: (p.tags || []).join(", "),
+          salePrice: p.salePrice ? String(p.salePrice) : "",
           processor: p.processor || "", ram: p.ram || "", storage: p.storage || "",
           display: p.display || "", battery: p.battery || "", os: p.operatingSystem || "",
           graphics: p.graphics || "", camera: p.camera || "", connectivity: p.connectivity || "",
           material: p.material || "", gender: p.gender || "", fit: p.fit || "",
         });
+        setIsFeatured(!!p.isFeatured);
         setVariants((p.variants || []).map((v: any) => ({ size: v.size || "", color: v.color || "", stock: v.stock || 0 })));
       } catch { router.push("/admin/products"); }
       finally { setLoading(false); }
@@ -85,6 +91,9 @@ export default function EditProductPage() {
         costPrice: form.costPrice ? parseFloat(form.costPrice) : 0,
         categoryId: form.categoryId,
         images: form.images ? form.images.split(",").map(s => s.trim()).filter(Boolean) : [],
+        tags: form.tags ? form.tags.split(",").map(s => s.trim()).filter(Boolean) : [],
+        isFeatured,
+        ...(form.salePrice ? { salePrice: parseFloat(form.salePrice) } : { salePrice: null }),
       };
       ["brand","model","sku","warranty","processor","ram","storage","display",
        "battery","os","connectivity","camera","graphics","material","gender","fit"
@@ -158,6 +167,18 @@ export default function EditProductPage() {
                 <div className="space-y-2">
                   <Label>SKU</Label>
                   <Input value={form.sku} onChange={e => updateForm("sku", e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Sale Price</Label>
+                  <Input type="number" step="0.01" value={form.salePrice} onChange={e => updateForm("salePrice", e.target.value)} placeholder={form.price ? formatPrice(parseFloat(form.price)) : ""} />
+                </div>
+                <div className="space-y-2 sm:col-span-2">
+                  <Label>Tags (comma-separated)</Label>
+                  <Input value={form.tags} onChange={e => updateForm("tags", e.target.value)} placeholder="e.g. new, trending, sale" />
+                </div>
+                <div className="flex items-center gap-2 sm:col-span-2">
+                  <Checkbox id="isFeatured" checked={isFeatured} onCheckedChange={(v) => setIsFeatured(!!v)} />
+                  <Label htmlFor="isFeatured" className="cursor-pointer">Featured Product</Label>
                 </div>
               </CardContent>
             </Card>

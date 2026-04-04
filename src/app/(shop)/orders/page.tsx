@@ -8,6 +8,7 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Package, ShoppingBag } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
 
 interface OrderItem {
   id: string;
@@ -90,7 +91,7 @@ export default function OrdersPage() {
                   <Badge variant="secondary" className={statusColor[order.status] || ""}>
                     {order.status}
                   </Badge>
-                  <span className="font-semibold">${order.total.toFixed(2)}</span>
+                  <span className="font-semibold">{formatPrice(order.total)}</span>
                 </div>
               </CardHeader>
               <CardContent>
@@ -115,13 +116,13 @@ export default function OrdersPage() {
                       <div className="flex-1 min-w-0">
                         <p className="truncate text-sm font-medium">{item.product.name}</p>
                         <p className="text-xs text-muted-foreground">
-                          Qty: {item.quantity} × ${item.price.toFixed(2)}
+                          Qty: {item.quantity} × {formatPrice(item.price)}
                           {(item.size || item.color) &&
                             ` · ${[item.size, item.color].filter(Boolean).join(" / ")}`}
                         </p>
                       </div>
                       <span className="text-sm font-medium">
-                        ${(item.quantity * item.price).toFixed(2)}
+                        {formatPrice(item.quantity * item.price)}
                       </span>
                     </div>
                   ))}

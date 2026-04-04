@@ -36,6 +36,8 @@ import {
   UserCircle,
 } from "lucide-react";
 
+import NotificationBell from "@/components/layout/NotificationBell";
+
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
@@ -111,6 +113,9 @@ export default function Header() {
             <Search className="h-5 w-5" />
             <span className="sr-only">Search</span>
           </Button>
+
+          {/* Notifications */}
+          {isAuthenticated && <NotificationBell />}
 
           {/* Cart */}
           <Button

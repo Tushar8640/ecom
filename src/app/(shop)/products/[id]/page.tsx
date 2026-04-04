@@ -17,6 +17,7 @@ import {
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { toast } from "sonner";
 import { ShoppingCart, Heart, ArrowLeft, Package } from "lucide-react";
+import { formatPrice } from "@/lib/utils";
 
 interface Variant {
   id: string;
@@ -169,7 +170,7 @@ export default function ProductDetailPage() {
             <Badge variant="secondary">{product.category.name}</Badge>
           )}
           <h1 className="text-3xl font-bold">{product.name}</h1>
-          <p className="text-3xl font-bold text-primary">${product.price.toFixed(2)}</p>
+          <p className="text-3xl font-bold text-primary">{formatPrice(product.price)}</p>
           <p className="text-muted-foreground">{product.description}</p>
 
           {/* Variant Selection */}

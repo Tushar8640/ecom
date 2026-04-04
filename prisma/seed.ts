@@ -23,15 +23,37 @@ async function main() {
   });
   console.log(`✓ Admin user: ${admin.email} (password: admin123)`);
 
+  // Create test user
+  const userPassword = await bcrypt.hash("user123", 12);
+  const user = await prisma.user.upsert({
+    where: { email: "user@shopnest.com" },
+    update: {},
+    create: {
+      name: "Test User",
+      email: "user@shopnest.com",
+      password: userPassword,
+      role: "USER",
+      cart: { create: {} },
+    },
+  });
+  console.log(`✓ Test user: ${user.email} (password: user123)`);
+
   // Create categories
+  const categoryData = [
+    { name: "Electronics", slug: "electronics" },
+    { name: "Clothing", slug: "clothing" },
+    { name: "Accessories", slug: "accessories" },
+    { name: "Home & Kitchen", slug: "home-kitchen" },
+    { name: "Sports", slug: "sports" },
+  ];
+
   const categories = await Promise.all(
-    ["Electronics", "Clothing", "Accessories", "Home & Kitchen", "Sports"].map(
-      (name) =>
-        prisma.category.upsert({
-          where: { name },
-          update: {},
-          create: { name },
-        })
+    categoryData.map((cat) =>
+      prisma.category.upsert({
+        where: { name: cat.name },
+        update: { slug: cat.slug },
+        create: { name: cat.name, slug: cat.slug },
+      })
     )
   );
 
