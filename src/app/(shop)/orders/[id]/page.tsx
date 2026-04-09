@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
-import { ArrowLeft, ShoppingBag } from "lucide-react";
+import { ArrowLeft, ShoppingBag, FileText } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 
 interface OrderItem {
@@ -108,6 +108,9 @@ export default function OrderDetailPage() {
             {order.status}
           </Badge>
           <span className="text-lg font-semibold">{formatPrice(order.total)}</span>
+          <Button variant="outline" size="sm" onClick={() => window.open(`/api/orders/${order.id}/invoice`, "_blank")}>
+            <FileText className="mr-2 h-4 w-4" /> Invoice
+          </Button>
         </div>
       </div>
 

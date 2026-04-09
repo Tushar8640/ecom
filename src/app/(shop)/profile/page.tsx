@@ -44,6 +44,7 @@ import {
   Pencil,
   Trash2,
   Loader2,
+  Download,
 } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -770,7 +771,25 @@ export default function ProfilePage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-950/30">
+              <div className="space-y-4">
+                <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950/30">
+                  <h3 className="font-semibold text-blue-700 dark:text-blue-400">
+                    Export Your Data
+                  </h3>
+                  <p className="mt-1 text-sm text-blue-600/80 dark:text-blue-400/80">
+                    Download a copy of all your personal data (GDPR compliant).
+                  </p>
+                  <Button
+                    variant="outline"
+                    className="mt-4"
+                    onClick={() => window.open("/api/user/data-export", "_blank")}
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    Export Data
+                  </Button>
+                </div>
+
+                <div className="rounded-lg border border-red-200 bg-red-50 p-4 dark:border-red-900 dark:bg-red-950/30">
                 <h3 className="font-semibold text-red-700 dark:text-red-400">
                   Delete Account
                 </h3>
@@ -786,6 +805,7 @@ export default function ProfilePage() {
                   <Trash2 className="mr-2 h-4 w-4" />
                   Delete Account
                 </Button>
+              </div>
               </div>
             </CardContent>
           </Card>

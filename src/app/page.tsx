@@ -7,6 +7,8 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ProductCard from "@/components/products/ProductCard";
 import FlashSaleSection from "@/components/shared/FlashSaleSection";
+import RecentlyViewed from "@/components/products/RecentlyViewed";
+import PersonalizedSection from "@/components/shared/PersonalizedSection";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -284,6 +286,12 @@ export default function Home() {
             </div>
           </section>
         )}
+
+        {/* Recently Viewed */}
+        <RecentlyViewed />
+
+        {/* Personalized Recommendations */}
+        <PersonalizedSection />
 
         {/* Featured Products */}
         <section className="bg-muted/50 py-16">

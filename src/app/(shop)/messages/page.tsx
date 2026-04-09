@@ -95,9 +95,7 @@ export default function MessagesPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold tracking-tight">Messages</h1>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-          <DialogTrigger asChild>
-            <Button><Plus className="mr-2 h-4 w-4" /> New Message</Button>
-          </DialogTrigger>
+          <DialogTrigger render={<Button><Plus className="mr-2 h-4 w-4" /> New Message</Button>} />
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Send a Message</DialogTitle>

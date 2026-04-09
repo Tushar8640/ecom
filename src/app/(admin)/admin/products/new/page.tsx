@@ -118,7 +118,7 @@ export default function NewProductPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Category *</Label>
-                  <Select value={form.categoryId} onValueChange={v => updateForm("categoryId", v)}>
+                  <Select value={form.categoryId} onValueChange={v => updateForm("categoryId", v ?? "")}>
                     <SelectTrigger><SelectValue placeholder="Select category" /></SelectTrigger>
                     <SelectContent>
                       {categories.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}

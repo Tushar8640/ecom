@@ -12,7 +12,7 @@ export async function PUT(request: NextRequest) {
 
     if (!validation.success) {
       return Response.json(
-        { error: validation.error.errors[0].message },
+        { error: validation.error.issues[0].message },
         { status: 400 }
       );
     }

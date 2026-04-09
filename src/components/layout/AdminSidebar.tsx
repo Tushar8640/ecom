@@ -31,10 +31,12 @@ import {
   FileText,
   Image as ImageIcon,
   Zap,
+  Tag,
   BookOpen,
   ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import AdminNotificationBell from "@/components/layout/AdminNotificationBell";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -48,6 +50,7 @@ const navItems = [
   { href: "/admin/reports", label: "Reports", icon: FileText },
   { href: "/admin/banners", label: "Banners", icon: ImageIcon },
   { href: "/admin/flash-sales", label: "Flash Sales", icon: Zap },
+  { href: "/admin/coupons", label: "Coupons", icon: Tag },
   { href: "/admin/blog", label: "Blog", icon: BookOpen },
   { href: "/admin/logs", label: "Activity Log", icon: ClipboardList },
 ];
@@ -69,14 +72,17 @@ function SidebarContent({
   return (
     <div className="flex h-full flex-col">
       {/* Logo */}
-      <div className="flex h-16 items-center gap-2 px-6">
-        <ShoppingBag className="h-6 w-6 text-primary-foreground" />
-        <span className="text-lg font-bold text-primary-foreground">
-          ShopNest
-        </span>
-        <span className="ml-1 rounded bg-primary-foreground/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-primary-foreground">
-          Admin
-        </span>
+      <div className="flex h-16 items-center justify-between px-6">
+        <div className="flex items-center gap-2">
+          <ShoppingBag className="h-6 w-6 text-primary-foreground" />
+          <span className="text-lg font-bold text-primary-foreground">
+            ShopNest
+          </span>
+          <span className="ml-1 rounded bg-primary-foreground/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-primary-foreground">
+            Admin
+          </span>
+        </div>
+        <AdminNotificationBell />
       </div>
 
       <Separator className="bg-white/10" />
@@ -152,12 +158,14 @@ export default function AdminSidebar() {
       {/* Mobile Toggle */}
       <div className="fixed left-4 top-4 z-50 lg:hidden">
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetTrigger asChild>
-            <Button size="icon" variant="outline" className="bg-white shadow">
-              <Menu className="h-5 w-5" />
-              <span className="sr-only">Open admin menu</span>
-            </Button>
-          </SheetTrigger>
+          <SheetTrigger
+            render={
+              <Button size="icon" variant="outline" className="bg-white shadow">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Open admin menu</span>
+              </Button>
+            }
+          />
           <SheetContent side="left" className="w-64 bg-zinc-900 p-0">
             <SheetHeader className="sr-only">
               <SheetTitle>Admin Navigation</SheetTitle>

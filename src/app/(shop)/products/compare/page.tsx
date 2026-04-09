@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
@@ -47,6 +47,14 @@ const specRows = [
 ] as const;
 
 export default function CompareProductsPage() {
+  return (
+    <Suspense fallback={<LoadingSpinner className="py-24" />}>
+      <CompareContent />
+    </Suspense>
+  );
+}
+
+function CompareContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
@@ -70,7 +78,7 @@ export default function CompareProductsPage() {
 
   function getValue(product: Product, key: string): string {
     if (key === "category") return product.category?.name || "—";
-    return (product as Record<string, unknown>)[key] as string || "—";
+    return (product as unknown as Record<string, unknown>)[key] as string || "—";
   }
 
   // Filter spec rows to only show rows where at least one product has a value

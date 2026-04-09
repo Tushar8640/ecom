@@ -6,6 +6,7 @@ import { store } from "./store";
 import { setUser } from "./authSlice";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import PWAInstallBanner from "@/components/shared/PWAInstallBanner";
 
 function AuthInitializer({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         <TooltipProvider>
           {children}
           <Toaster richColors position="top-right" />
+          <PWAInstallBanner />
         </TooltipProvider>
       </AuthInitializer>
     </Provider>

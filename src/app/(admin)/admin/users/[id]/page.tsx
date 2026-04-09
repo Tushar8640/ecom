@@ -212,7 +212,7 @@ export default function AdminUserDetailPage() {
           <DialogHeader>
             <DialogTitle>Change Role</DialogTitle>
           </DialogHeader>
-          <Select value={newRole} onValueChange={setNewRole}>
+          <Select value={newRole} onValueChange={(v) => setNewRole(v ?? "")}>
             <SelectTrigger>
               <SelectValue placeholder="Select role" />
             </SelectTrigger>

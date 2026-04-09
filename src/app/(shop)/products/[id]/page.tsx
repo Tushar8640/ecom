@@ -18,6 +18,10 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import { toast } from "sonner";
 import { ShoppingCart, Heart, ArrowLeft, Package } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
+import { useRecentlyViewed } from "@/hooks/useRecentlyViewed";
+import { useSwipe } from "@/hooks/useSwipe";
+import StickyAddToCart from "@/components/products/StickyAddToCart";
+import RecentlyViewed from "@/components/products/RecentlyViewed";
 
 interface Variant {
   id: string;
@@ -60,6 +64,11 @@ export default function ProductDetailPage() {
   const [selectedVariant, setSelectedVariant] = useState<string>("");
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const { addItem: addRecentlyViewed } = useRecentlyViewed();
+  const swipeHandlers = useSwipe(
+    () => setSelectedImage((i) => Math.min(i + 1, (product?.images.length || 1) - 1)),
+    () => setSelectedImage((i) => Math.max(i - 1, 0))
+  );
 
   useEffect(() => {
     async function fetchProduct() {
@@ -71,6 +80,12 @@ export default function ProductDetailPage() {
         }
         const data = await res.json();
         setProduct(data.product);
+        addRecentlyViewed({
+          id: data.product.id,
+          name: data.product.name,
+          price: data.product.price,
+          image: data.product.images?.[0] || "",
+        });
         if (data.product.variants?.length > 0) {
           setSelectedVariant(data.product.variants[0].id);
         }
@@ -132,7 +147,7 @@ export default function ProductDetailPage() {
       <div className="grid gap-8 lg:grid-cols-2">
         {/* Images */}
         <div className="space-y-4">
-          <div className="relative aspect-square overflow-hidden rounded-xl bg-muted">
+          <div className="relative aspect-square overflow-hidden rounded-xl bg-muted" {...swipeHandlers}>
             {product.images.length > 0 ? (
               <Image
                 src={product.images[selectedImage]}
@@ -177,7 +192,7 @@ export default function ProductDetailPage() {
           {product.variants.length > 0 && (
             <div className="space-y-2">
               <label className="text-sm font-medium">Variant</label>
-              <Select value={selectedVariant} onValueChange={setSelectedVariant}>
+              <Select value={selectedVariant} onValueChange={(v) => setSelectedVariant(v ?? "")}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select variant" />
                 </SelectTrigger>
@@ -250,6 +265,16 @@ export default function ProductDetailPage() {
           )}
         </div>
       </div>
+
+      <RecentlyViewed />
+
+      <StickyAddToCart
+        product={product}
+        selectedVariant={selectedVariant}
+        variantSize={variant?.size}
+        variantColor={variant?.color}
+        quantity={quantity}
+      />
     </div>
   );
 }

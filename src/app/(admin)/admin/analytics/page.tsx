@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import {
   ShoppingCart, Clock, CheckCircle, RotateCcw,
-  DollarSign, TrendingUp, BarChart3,
+  DollarSign, TrendingUp, BarChart3, Download,
 } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 
@@ -26,15 +27,28 @@ interface Analytics {
   categorySales: { categoryName: string; count: number; revenue: number }[];
 }
 
+interface AdvancedData {
+  funnel: { stage: string; count: number; color: string }[];
+  avgCLV: number;
+  revenueHistory: { month: string; revenue: number }[];
+  forecast: { month: string; projected: number }[];
+  conversionRate: number;
+}
+
 export default function AdminAnalyticsPage() {
   const [data, setData] = useState<Analytics | null>(null);
+  const [advanced, setAdvanced] = useState<AdvancedData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchAnalytics() {
       try {
-        const res = await fetch("/api/admin/analytics");
+        const [res, advRes] = await Promise.all([
+          fetch("/api/admin/analytics"),
+          fetch("/api/admin/analytics/advanced"),
+        ]);
         if (res.ok) setData(await res.json());
+        if (advRes.ok) setAdvanced(await advRes.json());
       } catch {} finally { setLoading(false); }
     }
     fetchAnalytics();
@@ -198,6 +212,112 @@ export default function AdminAnalyticsPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Conversion Funnel */}
+      {advanced?.funnel && (
+        <Card className="border-0 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-lg">Conversion Funnel</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {advanced.funnel.map((step, i) => {
+                const maxCount = Math.max(...advanced.funnel.map((s) => s.count), 1);
+                const pct = (step.count / maxCount) * 100;
+                const prevCount = i > 0 ? advanced.funnel[i - 1].count : step.count;
+                const dropoff = prevCount > 0 ? ((1 - step.count / prevCount) * 100).toFixed(1) : "0";
+                return (
+                  <div key={step.stage} className="flex items-center gap-4">
+                    <span className="w-32 shrink-0 text-sm font-medium">{step.stage}</span>
+                    <div className="flex-1">
+                      <div className="h-8 rounded bg-muted">
+                        <div
+                          className="flex h-full items-center rounded px-3 text-xs font-medium text-white"
+                          style={{ width: `${Math.max(pct, 8)}%`, backgroundColor: step.color }}
+                        >
+                          {step.count.toLocaleString()}
+                        </div>
+                      </div>
+                    </div>
+                    {i > 0 && (
+                      <span className="w-16 text-right text-xs text-red-500">-{dropoff}%</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* CLV & Conversion */}
+        {advanced && (
+          <Card className="border-0 shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-lg">Key Metrics</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between rounded-lg bg-violet-50 p-4">
+                <div>
+                  <p className="text-sm text-violet-600">Avg Customer Lifetime Value</p>
+                  <p className="text-2xl font-bold text-violet-700">{fmt(advanced.avgCLV)}</p>
+                </div>
+                <TrendingUp className="h-8 w-8 text-violet-400" />
+              </div>
+              <div className="flex items-center justify-between rounded-lg bg-blue-50 p-4">
+                <div>
+                  <p className="text-sm text-blue-600">Conversion Rate</p>
+                  <p className="text-2xl font-bold text-blue-700">{advanced.conversionRate}%</p>
+                </div>
+                <BarChart3 className="h-8 w-8 text-blue-400" />
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Revenue Forecast */}
+        {advanced?.forecast && advanced.forecast.length > 0 && (
+          <Card className="border-0 shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-lg">Revenue Forecast</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {advanced.revenueHistory?.map((r) => (
+                  <div key={r.month} className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">{r.month}</span>
+                    <span className="font-medium">{fmt(r.revenue)}</span>
+                  </div>
+                ))}
+                <div className="border-t pt-3">
+                  <p className="mb-2 text-xs font-medium text-muted-foreground">Projected</p>
+                  {advanced.forecast.map((f) => (
+                    <div key={f.month} className="flex items-center justify-between text-sm">
+                      <span className="text-emerald-600">{f.month}</span>
+                      <span className="font-medium text-emerald-600">{fmt(f.projected)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Export Buttons */}
+      <Card className="border-0 shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-lg">Export Data</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-3">
+          {["orders", "products", "customers"].map((type) => (
+            <Button key={type} variant="outline" onClick={() => window.open(`/api/admin/export?type=${type}`, "_blank")}>
+              <Download className="mr-2 h-4 w-4" /> Export {type.charAt(0).toUpperCase() + type.slice(1)}
+            </Button>
+          ))}
+        </CardContent>
+      </Card>
     </div>
   );
 }

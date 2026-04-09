@@ -26,6 +26,17 @@ export async function GET(request: NextRequest) {
       where.categoryId = categoryId;
     }
 
+    // Only show published products on public API (unless admin)
+    const isAdminRequest = request.headers.get("x-admin") === "true";
+    if (!isAdminRequest) {
+      where.isPublished = true;
+      where.OR_scheduled = undefined;
+      // Filter out products scheduled for the future
+      where.AND = [
+        { OR: [{ scheduledAt: null }, { scheduledAt: { lte: new Date() } }] },
+      ];
+    }
+
     const [products, total] = await Promise.all([
       prisma.product.findMany({
         where,
@@ -64,7 +75,7 @@ export async function POST(request: NextRequest) {
 
     if (!validation.success) {
       return Response.json(
-        { error: validation.error.errors[0].message },
+        { error: validation.error.issues[0].message },
         { status: 400 }
       );
     }

@@ -100,7 +100,7 @@ export default function ProductFilters() {
       {/* Category */}
       <Select
         value={currentCategory || "all"}
-        onValueChange={handleCategoryChange}
+        onValueChange={(v) => handleCategoryChange(v ?? "all")}
       >
         <SelectTrigger className="w-full sm:w-44">
           <SelectValue placeholder="Category" />
@@ -118,7 +118,7 @@ export default function ProductFilters() {
       {/* Sort */}
       <Select
         value={currentSort || "default"}
-        onValueChange={handleSortChange}
+        onValueChange={(v) => handleSortChange(v ?? "default")}
       >
         <SelectTrigger className="w-full sm:w-44">
           <SelectValue placeholder="Sort by" />

@@ -16,7 +16,7 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
-import { Plus, Search, Pencil, Trash2, Package, Loader2, X } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Package, Loader2, X, Copy } from "lucide-react";
 import { toast } from "sonner";
 import { formatPrice } from "@/lib/utils";
 
@@ -119,6 +119,23 @@ export default function AdminProductsPage() {
     finally { setDeleting(false); }
   };
 
+  const handleDuplicate = async (productId: string) => {
+    try {
+      const res = await fetch("/api/admin/products/duplicate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId }),
+      });
+      if (res.ok) {
+        toast.success("Product duplicated");
+        fetchProducts();
+      } else {
+        const data = await res.json();
+        toast.error(data.error || "Failed to duplicate");
+      }
+    } catch { toast.error("Something went wrong"); }
+  };
+
   const totalStock = (variants: { stock: number }[]) =>
     variants.reduce((s, v) => s + v.stock, 0);
 
@@ -153,7 +170,7 @@ export default function AdminProductsPage() {
         </form>
 
         <div className="w-48">
-          <Select value={categoryId} onValueChange={(v) => { setCategoryId(v); setPage(1); }}>
+          <Select value={categoryId} onValueChange={(v) => { setCategoryId(v ?? ""); setPage(1); }}>
             <SelectTrigger>
               <SelectValue placeholder="All categories" />
             </SelectTrigger>
@@ -166,7 +183,7 @@ export default function AdminProductsPage() {
         </div>
 
         <div className="w-44">
-          <Select value={stockFilter} onValueChange={(v) => { setStockFilter(v); setPage(1); }}>
+          <Select value={stockFilter} onValueChange={(v) => { setStockFilter(v ?? ""); setPage(1); }}>
             <SelectTrigger>
               <SelectValue placeholder="All stock levels" />
             </SelectTrigger>
@@ -235,6 +252,9 @@ export default function AdminProductsPage() {
                   <TableCell className="font-mono text-xs">{p.sku.slice(0, 8)}</TableCell>
                   <TableCell>
                     <div className="flex gap-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDuplicate(p.id)} title="Duplicate">
+                        <Copy className="h-4 w-4" />
+                      </Button>
                       <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
                         <Link href={`/admin/products/${p.id}/edit`}>
                           <Pencil className="h-4 w-4" />

@@ -103,7 +103,7 @@ export default function AdminOrdersPage() {
         <p className="text-sm text-gray-500">Manage customer orders</p>
       </div>
 
-      <Select value={filter} onValueChange={setFilter}>
+      <Select value={filter} onValueChange={(v) => setFilter(v ?? "all")}>
         <SelectTrigger className="w-44">
           <SelectValue placeholder="Filter by status" />
         </SelectTrigger>
@@ -310,7 +310,7 @@ export default function AdminOrdersPage() {
               <Separator />
               <div className="flex items-center gap-3">
                 <span className="text-sm font-medium">Update Status:</span>
-                <Select value={newStatus} onValueChange={setNewStatus}>
+                <Select value={newStatus} onValueChange={(v) => setNewStatus(v ?? "")}>
                   <SelectTrigger className="w-40">
                     <SelectValue />
                   </SelectTrigger>

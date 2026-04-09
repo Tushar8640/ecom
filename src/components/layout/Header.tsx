@@ -37,6 +37,7 @@ import {
 } from "lucide-react";
 
 import NotificationBell from "@/components/layout/NotificationBell";
+import CartDrawer from "@/components/cart/CartDrawer";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -65,6 +66,7 @@ export default function Header() {
     { href: "/products", label: "Products" },
     ...(isAuthenticated
       ? [
+          { href: "/wishlist", label: "Wishlist" },
           { href: "/orders", label: "Orders" },
           { href: "/messages", label: "Messages" },
         ]
@@ -118,23 +120,7 @@ export default function Header() {
           {isAuthenticated && <NotificationBell />}
 
           {/* Cart */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="relative"
-            onClick={() => router.push("/cart")}
-          >
-            <ShoppingCart className="h-5 w-5" />
-            {cartCount > 0 && (
-              <Badge
-                variant="destructive"
-                className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full p-0 text-[10px]"
-              >
-                {cartCount > 99 ? "99+" : cartCount}
-              </Badge>
-            )}
-            <span className="sr-only">Cart</span>
-          </Button>
+          <CartDrawer />
 
           {/* User Menu - Desktop */}
           <div className="hidden md:block">
@@ -165,23 +151,17 @@ export default function Header() {
 
                   {/* Menu items */}
                   <div className="p-1.5">
-                    <DropdownMenuItem asChild className="gap-2 rounded-md px-3 py-2">
-                      <Link href="/profile">
+                    <DropdownMenuItem className="gap-2 rounded-md px-3 py-2" render={<Link href="/profile" />}>
                         <UserCircle className="h-4 w-4 text-muted-foreground" />
                         Profile
-                      </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="gap-2 rounded-md px-3 py-2">
-                      <Link href="/orders">
+                    <DropdownMenuItem className="gap-2 rounded-md px-3 py-2" render={<Link href="/orders" />}>
                         <Package className="h-4 w-4 text-muted-foreground" />
                         Orders
-                      </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="gap-2 rounded-md px-3 py-2">
-                      <Link href="/messages">
+                    <DropdownMenuItem className="gap-2 rounded-md px-3 py-2" render={<Link href="/messages" />}>
                         <MessageSquare className="h-4 w-4 text-muted-foreground" />
                         Messages
-                      </Link>
                     </DropdownMenuItem>
                   </div>
 
@@ -211,12 +191,14 @@ export default function Header() {
 
           {/* Mobile Menu */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Menu</span>
-              </Button>
-            </SheetTrigger>
+            <SheetTrigger
+              render={
+                <Button variant="ghost" size="icon" className="md:hidden">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Menu</span>
+                </Button>
+              }
+            />
             <SheetContent side="right" className="w-80">
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">

@@ -79,7 +79,7 @@ export default function AdminMessagesPage() {
         <p className="text-sm text-gray-500">View and reply to customer messages</p>
       </div>
 
-      <Select value={filter} onValueChange={setFilter}>
+      <Select value={filter} onValueChange={(v) => setFilter(v ?? "all")}>
         <SelectTrigger className="w-44">
           <SelectValue placeholder="Filter" />
         </SelectTrigger>
