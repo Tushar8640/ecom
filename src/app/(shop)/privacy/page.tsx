@@ -75,7 +75,7 @@ export default function PrivacyPolicyPage() {
             You may access, update, or delete your personal information at any
             time through your account settings. You may also request a copy of
             your data or ask us to stop processing it by contacting
-            support@shopnest.com.
+            support@shopnext.com.
           </p>
         </section>
 
@@ -85,7 +85,7 @@ export default function PrivacyPolicyPage() {
           </h2>
           <p className="mt-2">
             If you have questions about this policy, please contact us at
-            privacy@shopnest.com.
+            privacy@shopnext.com.
           </p>
         </section>
       </div>

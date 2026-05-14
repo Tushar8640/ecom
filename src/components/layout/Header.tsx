@@ -87,7 +87,7 @@ export default function Header() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <ShoppingBag className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold tracking-tight">ShopNest</span>
+          <span className="text-xl font-bold tracking-tight">ShopNext</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -203,7 +203,7 @@ export default function Header() {
               <SheetHeader>
                 <SheetTitle className="flex items-center gap-2">
                   <ShoppingBag className="h-5 w-5 text-primary" />
-                  ShopNest
+                  ShopNext
                 </SheetTitle>
               </SheetHeader>
 

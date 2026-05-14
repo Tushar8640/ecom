@@ -108,7 +108,7 @@ export default function RegisterPage() {
           <ShoppingBag className="h-6 w-6 text-primary-foreground" />
         </div>
         <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-        <CardDescription>Join ShopNest and start shopping</CardDescription>
+        <CardDescription>Join ShopNext and start shopping</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">

@@ -76,7 +76,7 @@ function SidebarContent({
         <div className="flex items-center gap-2">
           <ShoppingBag className="h-6 w-6 text-primary-foreground" />
           <span className="text-lg font-bold text-primary-foreground">
-            ShopNest
+            ShopNext
           </span>
           <span className="ml-1 rounded bg-primary-foreground/20 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-primary-foreground">
             Admin

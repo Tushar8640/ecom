@@ -15,7 +15,7 @@ export default function Footer() {
             <div className="flex items-center gap-2">
               <ShoppingBag className="h-5 w-5 text-primary" />
               <span className="text-lg font-bold tracking-tight">
-                ShopNest
+                ShopNext
               </span>
             </div>
             <p className="max-w-xs text-sm text-muted-foreground">
@@ -107,7 +107,7 @@ export default function Footer() {
         <Separator className="my-8" />
 
         <p className="text-center text-sm text-muted-foreground">
-          &copy; {currentYear} ShopNest. All rights reserved.
+          &copy; {currentYear} ShopNext. All rights reserved.
         </p>
       </div>
     </footer>

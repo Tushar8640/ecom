@@ -41,7 +41,7 @@ export async function GET() {
     return new Response(JSON.stringify(exportData, null, 2), {
       headers: {
         "Content-Type": "application/json",
-        "Content-Disposition": `attachment; filename="shopnest-data-export.json"`,
+        "Content-Disposition": `attachment; filename="shopnext-data-export.json"`,
       },
     });
   } catch (error: any) {

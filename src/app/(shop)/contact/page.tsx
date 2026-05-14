@@ -39,7 +39,7 @@ export default function ContactPage() {
             {
               icon: Mail,
               title: "Email",
-              detail: "support@shopnest.com",
+              detail: "support@shopnext.com",
               color: "bg-blue-50 text-blue-600",
             },
             {

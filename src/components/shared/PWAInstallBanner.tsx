@@ -46,7 +46,7 @@ export default function PWAInstallBanner() {
           <Download className="h-5 w-5 text-primary" />
         </div>
         <div className="flex-1">
-          <p className="text-sm font-medium">Install ShopNest</p>
+          <p className="text-sm font-medium">Install ShopNext</p>
           <p className="text-xs text-muted-foreground">Add to your home screen for a better experience</p>
           <div className="mt-2 flex gap-2">
             <Button size="sm" onClick={handleInstall}>Install</Button>

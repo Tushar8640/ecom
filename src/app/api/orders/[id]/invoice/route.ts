@@ -44,7 +44,7 @@ th{text-align:left;padding:8px;border-bottom:2px solid #333;font-size:14px}
 @media print{body{padding:20px}}</style></head>
 <body>
 <div class="header">
-  <div><div class="logo">ShopNest</div><p style="color:#666;margin:4px 0">Invoice</p></div>
+  <div><div class="logo">ShopNext</div><p style="color:#666;margin:4px 0">Invoice</p></div>
   <div style="text-align:right">
     <p><strong>Invoice #${order.id.slice(0, 8)}</strong></p>
     <p style="color:#666">${new Date(order.createdAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}</p>
@@ -64,7 +64,7 @@ th{text-align:left;padding:8px;border-bottom:2px solid #333;font-size:14px}
     <tr class="total-row"><td colspan="3" style="text-align:right;padding:12px 8px;border-top:2px solid #333">Total:</td><td style="text-align:right;padding:12px 8px;border-top:2px solid #333">${formatPrice(order.total)}</td></tr>
   </tbody>
 </table>
-<p style="margin-top:40px;text-align:center;color:#999;font-size:12px">Thank you for shopping with ShopNest!</p>
+<p style="margin-top:40px;text-align:center;color:#999;font-size:12px">Thank you for shopping with ShopNext!</p>
 </body></html>`;
 
     return new Response(html, {

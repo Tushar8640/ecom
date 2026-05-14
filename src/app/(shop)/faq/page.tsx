@@ -31,7 +31,7 @@ const faqs = [
   },
   {
     q: "How do I contact customer support?",
-    a: "You can reach us via the Contact page, email us at support@shopnest.com, or use the Messages section in your account for direct support.",
+    a: "You can reach us via the Contact page, email us at support@shopnext.com, or use the Messages section in your account for direct support.",
   },
 ];
 
@@ -43,7 +43,7 @@ export default function FAQPage() {
           Frequently Asked Questions
         </h1>
         <p className="mt-2 text-muted-foreground">
-          Find answers to the most common questions about ShopNest.
+          Find answers to the most common questions about ShopNext.
         </p>
       </div>
 

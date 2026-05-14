@@ -37,7 +37,7 @@ export default function MissionPage() {
       <div className="text-center">
         <h1 className="text-3xl font-bold tracking-tight">Our Mission</h1>
         <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-          At ShopNest, we believe that great shopping experiences should be
+          At ShopNext, we believe that great shopping experiences should be
           simple, affordable, and sustainable. Our mission is to connect people
           with products they love while making a positive impact on the world.
         </p>

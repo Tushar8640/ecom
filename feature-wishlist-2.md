@@ -1,6 +1,6 @@
 # 🚀 Feature Wishlist — Phase 2
 
-Next-level features to make ShopNest more user-friendly, admin-manageable, and customer-focused.
+Next-level features to make ShopNext more user-friendly, admin-manageable, and customer-focused.
 
 ---
 
@@ -92,4 +92,4 @@ Next-level features to make ShopNest more user-friendly, admin-manageable, and c
 
 ---
 
-> These features build on top of the existing ShopNest foundation. Prioritize based on user feedback and business goals.
+> These features build on top of the existing ShopNext foundation. Prioritize based on user feedback and business goals.

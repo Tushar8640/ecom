@@ -9,7 +9,7 @@ interface RecentProduct {
   image: string;
 }
 
-const STORAGE_KEY = "shopnest_recently_viewed";
+const STORAGE_KEY = "shopnext_recently_viewed";
 const MAX_ITEMS = 12;
 
 export function useRecentlyViewed() {

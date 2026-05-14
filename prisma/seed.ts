@@ -12,11 +12,11 @@ async function main() {
   // Create admin user
   const adminPassword = await bcrypt.hash("admin123", 12);
   const admin = await prisma.user.upsert({
-    where: { email: "admin@shopnest.com" },
+    where: { email: "admin@shopnext.com" },
     update: {},
     create: {
       name: "Admin",
-      email: "admin@shopnest.com",
+      email: "admin@shopnext.com",
       password: adminPassword,
       role: "ADMIN",
     },
@@ -26,11 +26,11 @@ async function main() {
   // Create test user
   const userPassword = await bcrypt.hash("user123", 12);
   const user = await prisma.user.upsert({
-    where: { email: "user@shopnest.com" },
+    where: { email: "user@shopnext.com" },
     update: {},
     create: {
       name: "Test User",
-      email: "user@shopnest.com",
+      email: "user@shopnext.com",
       password: userPassword,
       role: "USER",
       cart: { create: {} },

@@ -88,7 +88,7 @@ function LoginForm() {
           <ShoppingBag className="h-6 w-6 text-primary-foreground" />
         </div>
         <CardTitle className="text-2xl font-bold">Welcome back</CardTitle>
-        <CardDescription>Sign in to your ShopNest account</CardDescription>
+        <CardDescription>Sign in to your ShopNext account</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">

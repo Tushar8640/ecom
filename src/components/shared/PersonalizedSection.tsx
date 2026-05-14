@@ -22,7 +22,7 @@ export default function PersonalizedSection() {
 
     // Get recently viewed categories from localStorage
     try {
-      const stored = localStorage.getItem("shopnest_recently_viewed");
+      const stored = localStorage.getItem("shopnext_recently_viewed");
       if (!stored) return;
       const recent = JSON.parse(stored);
       if (recent.length === 0) return;

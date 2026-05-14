@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShopNest - Discover Quality Products",
+  title: "ShopNext - Discover Quality Products",
   description:
     "Shop the best products at unbeatable prices. Free shipping, secure payments, and 24/7 support.",
 };

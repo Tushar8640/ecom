@@ -12,7 +12,7 @@ export default function TermsPage() {
             1. Acceptance of Terms
           </h2>
           <p className="mt-2">
-            By accessing and using ShopNest, you agree to be bound by these Terms
+            By accessing and using ShopNext, you agree to be bound by these Terms
             of Service. If you do not agree with any part of these terms, please
             do not use our services.
           </p>
@@ -79,7 +79,7 @@ export default function TermsPage() {
             7. Limitation of Liability
           </h2>
           <p className="mt-2">
-            ShopNest shall not be liable for any indirect, incidental, or
+            ShopNext shall not be liable for any indirect, incidental, or
             consequential damages arising from your use of our services or
             products purchased through our platform.
           </p>
@@ -91,7 +91,7 @@ export default function TermsPage() {
           </h2>
           <p className="mt-2">
             For questions about these terms, please contact us at
-            legal@shopnest.com.
+            legal@shopnext.com.
           </p>
         </section>
       </div>
